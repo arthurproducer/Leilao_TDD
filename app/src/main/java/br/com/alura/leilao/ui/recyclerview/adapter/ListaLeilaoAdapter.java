@@ -10,16 +10,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import br.com.alura.leilao.R;
-import br.com.alura.leilao.model.Leilao;
+import br.com.alura.bidding.R;
+import br.com.alura.leilao.model.Bidding;
 
 public class ListaLeilaoAdapter extends RecyclerView.Adapter<ListaLeilaoAdapter.ViewHolder> {
 
-    private final List<Leilao> leiloes;
+    private final List<Bidding> leiloes;
     private final Context context;
     private OnItemClickListener onItemClickListener;
 
-    public ListaLeilaoAdapter(Context context, List<Leilao> leiloes) {
+    public ListaLeilaoAdapter(Context context, List<Bidding> leiloes) {
         this.context = context;
         this.leiloes = leiloes;
     }
@@ -37,8 +37,8 @@ public class ListaLeilaoAdapter extends RecyclerView.Adapter<ListaLeilaoAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Leilao leilao = pegaLeilaoPorPosicao(position);
-        holder.vincula(leilao);
+        Bidding bidding = pegaLeilaoPorPosicao(position);
+        holder.vincula(bidding);
     }
 
     @Override
@@ -49,32 +49,35 @@ public class ListaLeilaoAdapter extends RecyclerView.Adapter<ListaLeilaoAdapter.
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView descricao;
-        private Leilao leilao;
+        private final TextView valor;
+        private Bidding bidding;
 
         ViewHolder(View itemView) {
             super(itemView);
             descricao = itemView.findViewById(R.id.item_leilao_descricao);
+            valor = itemView.findViewById(R.id.item_leilao_maior_lance);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onItemClickListener.onItemClick(leilao);
+                    onItemClickListener.onItemClick(bidding);
                 }
             });
         }
 
-        void vincula(Leilao leilao) {
-            this.leilao = leilao;
-            descricao.setText(leilao.getDescricao());
+        void vincula(Bidding bidding) {
+            this.bidding = bidding;
+            descricao.setText(bidding.getDescription());
+            valor.setText(String.valueOf(bidding.getHighestBid()));
         }
 
     }
 
-    public Leilao pegaLeilaoPorPosicao(int posicao) {
+    public Bidding pegaLeilaoPorPosicao(int posicao) {
         return this.leiloes.get(posicao);
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Leilao leilao);
+        void onItemClick(Bidding bidding);
     }
 
 }
