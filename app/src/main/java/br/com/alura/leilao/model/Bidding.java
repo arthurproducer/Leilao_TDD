@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import br.com.alura.leilao.exceptions.LanceFoiMenorQueMaiorLanceException;
+import br.com.alura.leilao.exceptions.MesmoUsuarioDoUltimoLanceException;
+import br.com.alura.leilao.exceptions.UsuarioJaFez5LancesException;
+
 public class Bidding implements Serializable {
 
     private final String description;
@@ -22,39 +26,27 @@ public class Bidding implements Serializable {
     }
 
     public void propoe(Bid bid) {
+        handleBid(bid);
+        bids.add(bid);
         double valorAtual = bid.getValue();
-
-        if(handleBid(bid)){
-            bids.add(bid);
-            Collections.sort(bids); //organiza lances
-            calculaMaiorLance(valorAtual);
-            calculaMenorLance(valorAtual);
-        };
+        Collections.sort(bids); //organiza lances
+        calculaMaiorLance(valorAtual);
     }
 
-    private boolean handleBid(Bid bid) {
+    private void handleBid(Bid bid) {
         //Retorna aviso para o usuário
         if (bids.isEmpty()) {
             initBidsToFirstBid(bid);
-            return true;
-        } else return isHighestBidder(bid)
-                && isDifferentUser(bid)
-                && !isLastBid(bid.getUser());
+        } else {
+            isHighestBidder(bid);
+            isDifferentUser(bid);
+            isLastBid(bid.getUser());
+        }
     }
 
     private void initBidsToFirstBid(Bid bid) {
         highestBid = bid.getValue();
         lowestBid = bid.getValue();
-    }
-
-    private boolean isHighestBidder(Bid bid) {
-        return bid.getValue() > bids.get(0).getValue();
-    }
-
-    private void calculaMenorLance(double valorAtual) {
-        if (valorAtual < lowestBid) {
-            lowestBid = valorAtual;
-        }
     }
 
     private void calculaMaiorLance(double valorAtual) {
@@ -91,24 +83,28 @@ public class Bidding implements Serializable {
         //Método subList -> Pegas os 3 primeiros valores
     }
 
-    private boolean isDifferentUser(Bid bid) {
+    private void isDifferentUser(Bid bid) {
         if (bids.get(0).getUser().equals(bid.getUser())) {
-            return false;
+            throw new MesmoUsuarioDoUltimoLanceException();
         }
-        return true;
     }
 
-    private boolean isLastBid(User user) {
+    private void isHighestBidder(Bid bid) {
+        if (bid.getValue() < bids.get(0).getValue()) {
+            throw new LanceFoiMenorQueMaiorLanceException();
+        }
+    }
+
+    private void isLastBid(User user) {
         int cont = 0;
 
         for (Bid l : getBids()) {
             if (user.equals(l.getUser())) {
                 cont++;
                 if (cont == 5) {
-                    return true;
+                    throw new UsuarioJaFez5LancesException();
                 }
             }
         }
-        return false;
     }
 }

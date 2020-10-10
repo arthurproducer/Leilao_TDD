@@ -38,23 +38,23 @@ public class ListaLeilaoActivity extends AppCompatActivity {
         Bidding console = new Bidding("Console");
         Bid bid = new Bid(new User("Arthur"),1600);
         Bid bid2 = new Bid(new User("Mariane"),1800);
-        Bid bid3 = new Bid(new User("Roger"),1200);
+        Bid bid3 = new Bid(new User("Roger"),2100);
         console.propoe(bid);
         console.propoe(bid2);
         console.propoe(bid3);
 
         Bidding computador = new Bidding("Computador");
         Bid computadorlance = new Bid(new User("Arthur"),5000);
-        Bid computadorlance2 = new Bid(new User("Mariane"),2500);
-        Bid computadorlance3 = new Bid(new User("Roger"),1500);
+        Bid computadorlance2 = new Bid(new User("Mariane"),7500);
+        Bid computadorlance3 = new Bid(new User("Roger"),8500);
         computador.propoe(computadorlance);
         computador.propoe(computadorlance2);
         computador.propoe(computadorlance3);
 
         Bidding carro = new Bidding("Carro");
         Bid carrolance = new Bid(new User("Arthur"),22000);
-        Bid carrolance2 = new Bid(new User("Mariane"),20000);
-        Bid carrolance3 = new Bid(new User("Roger"),15000);
+        Bid carrolance2 = new Bid(new User("Mariane"),220000);
+        Bid carrolance3 = new Bid(new User("Roger"),315000);
         carro.propoe(carrolance);
         carro.propoe(carrolance2);
         carro.propoe(carrolance3);
